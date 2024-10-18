@@ -212,23 +212,21 @@
     shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
 
     shellAliases = {
-      update = "sudo nixos-rebuild switch --max-jobs 2 --cores 4";
+      update = "sudo nixos-rebuild switch --max-jobs 2 --cores 2";
       e = "nvim";
-      econf = "sudo -E nvim /etc/nixos/configuration.nix";
-      ezsh  = "e ~/.zshrc" ;
-      resource  = "source ~/.zshrc";
+      econf = "nvim ~/nixconfig-flake/configuration.nix";
       se    = "sudo -E nvim";
     };
     ohMyZsh = {
       enable = true;
       theme = "clean";
       plugins = [
-				"aliases"
-				"alias-finder"
-				"bgnotify"
-				"common-aliases"
-				"history-substring-search"
-				"thefuck"
+	"aliases"
+	"alias-finder"
+	"bgnotify"
+	"common-aliases"
+	"history-substring-search"
+	"thefuck"
       ];
     };
   };
