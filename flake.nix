@@ -20,7 +20,19 @@
       home-manager,
     }:
     {
+      defaultPackage.x86_64-linux = home-manager.defaultPackage.x86_64-linux;
+
+      homeConfigurations = {
+        "nikita" = home-manager.lib.homeManagerConfiguration {
+          # Note: I am sure this could be done better with flake-utils or something
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
+
+          modules = [ ./home.nix ]; # Defined later
+        };
+      };
+
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        packages.x86_64-linux.default = home-manager.defaultPackage.x86_64-linux;
         modules = [
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
           ./hardware-configuration.nix
