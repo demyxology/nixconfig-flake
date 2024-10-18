@@ -8,7 +8,7 @@
   outputs = { self, nixpkgs, nur, nixos-hardware }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       modules = [ 
-        nixos-hardware.nixModules.lenovo-thinkpad-x220
+        nixos-hardware.nixosModules.lenovo-thinkpad-x220
         ./hardware-configuration.nix
         ./configuration.nix 
       ];
