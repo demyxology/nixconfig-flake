@@ -1,5 +1,4 @@
 {
-
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
@@ -9,7 +8,7 @@
   outputs = { self, nixpkgs, nur, nixos-hardware }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       modules = [ 
-        nixos-hardware.lenovo-thinkpad-x220
+        nixos-hardware.nixModules.lenovo-thinkpad-x220
         ./hardware-configuration.nix
         ./configuration.nix 
       ];
