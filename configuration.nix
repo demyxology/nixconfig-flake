@@ -2,7 +2,12 @@
 # your system.	Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   # Bootloader.
@@ -38,8 +43,12 @@
     description = "nikita";
 
     # video added for brightness control
-    extraGroups = [ "networkmanager" "wheel" "video" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+    ];
+    packages = with pkgs; [ ];
   };
 
   environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw
@@ -50,9 +59,9 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 30d";
-    };
+  };
 
-# i3 config
+  # i3 config
   services = {
     xserver = {
       xkb.layout = "us";
@@ -73,7 +82,7 @@
         };
       };
       # displayManager = {
-        # lightdm.enable = true;
+      # lightdm.enable = true;
       # };
     };
     blueman.enable = true;
@@ -94,7 +103,7 @@
     pulseaudio = true;
   };
 
-    programs = {
+  programs = {
     thunar.enable = true;
     dconf.enable = true;
   };
@@ -112,8 +121,7 @@
       after = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart =
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
@@ -121,27 +129,82 @@
     };
   };
 
- # List packages installed in system profile. To search, run:
+  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bazelisk
+    binutils
+    chafa
     cifs-utils
+    dafny
+    deno
     dex
-    fd
     discord
+    #dmd
     dmenu
+    dub
+    emacs
+    fd
+    file
+    fzf
+    gcc14
+    gccStdenv
+    ghc
     git
+    gleam
+    glibc
+    go
     google-chrome
     gvfs
+    haskell-language-server
+    haskellPackages.fast-tags
+    haskellPackages.ghci-dap
+    haskellPackages.haskell-debug-adapter
+    haskellPackages.hoogle
+    jdk22
+    julia
     kitty
+    kotlin
+    lazygit
     libdrm
     libuv
     libva-utils
+    llvmPackages_19.clang-tools
+    lua51Packages.jsregexp
+    lua51Packages.lua
+    lua51Packages.luasnip
+    luarocks
+    mitscheme
+    mono
     neovim
+    vimPlugins.coq_nvim
+    vimPlugins.mason-lspconfig-nvim
+    vimPlugins.nvim-dap
+    vimPlugins.neoconf-nvim
+    vimPlugins.null-ls-nvim
+    vimPlugins.omnisharp-extended-lsp-nvim
+    ninja
+    nodejs_22
+    ocaml
+    ocamlPackages.ocaml-lsp
+    opam
+    php
     polkit
     pulseaudioFull
+    python312
+    rakudo
     ripgrep
+    ruby
+    rustup
+    sbcl
+    serve-d
+    swift
     thefuck
+    tree-sitter
+    ueberzugpp
     unzip
+    viu
+    vscode
     wget
     xclip
     xdg-desktop-portal
@@ -150,8 +213,10 @@
     xfce.thunar
     xfce.thunar-volman
     xss-lock
+    zed-editor
     zoxide
     zsh
+    nixfmt-rfc-style
     (retroarch.override {
       cores = with libretro; [
         snes9x
@@ -160,15 +225,15 @@
   ];
 
   xdg = {
-  autostart.enable = true;
-  portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal
-    ];
+    autostart.enable = true;
+    portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-gtk
+        pkgs.xdg-desktop-portal
+      ];
+    };
   };
-};
 
   services.gvfs = {
     enable = true;
@@ -182,7 +247,7 @@
   ];
 
   # Fonts
-    fonts = {
+  fonts = {
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk
@@ -191,26 +256,32 @@
       dejavu_fonts
     ];
     fontconfig.defaultFonts = {
-      serif = [ "Noto Serif" "Source Han Serif" ];
-      sansSerif = [ "Noto Sans" "Source Han Sans" ];
+      serif = [
+        "Noto Serif"
+        "Source Han Serif"
+      ];
+      sansSerif = [
+        "Noto Sans"
+        "Source Han Sans"
+      ];
     };
   };
 
-	programs.neovim = {
-		enable = true;
-		defaultEditor = true;
-		configure = {
-			customRC = ''
-			set tabstop=2
-			set shiftwidth=2
-			set smartcase
-			'';
-		};
-	};
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    configure = {
+      customRC = ''
+        set tabstop=2
+        set shiftwidth=2
+        set smartcase
+      '';
+    };
+  };
 
   programs.zsh = {
     enable = true;
-    enableCompletion = true;	
+    enableCompletion = true;
     enableBashCompletion = true;
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
@@ -218,25 +289,24 @@
     shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
 
     shellAliases = {
-      update = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 2";
+      update = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 3 --cores 1";
       e = "nvim";
       econf = "nvim ~/nixconfig-flake/configuration.nix";
-      se    = "sudo -E nvim";
+      se = "sudo -E nvim";
     };
     ohMyZsh = {
       enable = true;
       theme = "clean";
       plugins = [
-	"aliases"
-	"alias-finder"
-	"bgnotify"
-	"common-aliases"
-	"history-substring-search"
-	"thefuck"
+        "aliases"
+        "alias-finder"
+        "bgnotify"
+        "common-aliases"
+        "history-substring-search"
+        "thefuck"
       ];
     };
   };
-
 
   # Hardware (opengl, bluetooth, etc...)
   hardware = {
@@ -269,33 +339,34 @@
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-  networking.firewall = { 
+  networking.firewall = {
     enable = true;
     extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
   };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-  
-  /* 
+
   fileSystems."/home/nikita/netshare/balthasar/c" = {
-      device = "//balthasar/c";
-      fsType = "cifs";
-      options = let
+    device = "//balthasar/c";
+    fsType = "cifs";
+    options =
+      let
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in 
-        ["${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100"];
-  }; 
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100" ];
+  };
 
   fileSystems."/home/nikita/netshare/balthasar/d" = {
-      device = "//balthasar/d";
-      fsType = "cifs";
-      options = let
+    device = "//balthasar/d";
+    fsType = "cifs";
+    options =
+      let
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in 
-        ["${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100"];
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100" ];
 
-  }; 
-*/ 
+  };
+  #
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
