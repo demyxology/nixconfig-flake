@@ -218,7 +218,7 @@
     shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
 
     shellAliases = {
-      update = "sudo nixos-rebuild switch --max-jobs 2 --cores 2";
+      update = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 2";
       e = "nvim";
       econf = "nvim ~/nixconfig-flake/configuration.nix";
       se    = "sudo -E nvim";
