@@ -51,7 +51,15 @@
     packages = with pkgs; [ ];
   };
 
+  nix.settings.trusted-users = [
+    "root"
+    "nikita"
+  ];
+
   environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw
+  environment.variables = {
+    TERMINAL = "kitty";
+  };
 
   nix.settings.experimental-features = "nix-command flakes";
 
@@ -81,9 +89,7 @@
           enableXfwm = false;
         };
       };
-      # displayManager = {
-      # lightdm.enable = true;
-      # };
+      displayManager.lightdm.greeters.lomiri.enable = true;
     };
     blueman.enable = true;
     pipewire = {
@@ -93,6 +99,15 @@
         support32Bit = true;
       };
       pulse.enable = true;
+    };
+  };
+
+  services.picom = {
+    enable = true;
+    backend = "egl";
+    vSync = true;
+    settings = {
+      corner-radius = 10;
     };
   };
 
@@ -132,74 +147,42 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    bazelisk
     binutils
+    cachix
     chafa
     cifs-utils
-    dafny
-    deno
     dex
     discord
-    #dmd
     dmenu
-    dub
     emacs
     fd
     file
     fzf
-    gcc14
-    gccStdenv
-    ghc
     git
-    gleam
-    glibc
     go
     google-chrome
     gvfs
-    haskell-language-server
-    haskellPackages.fast-tags
-    haskellPackages.ghci-dap
-    haskellPackages.haskell-debug-adapter
-    haskellPackages.hoogle
     home-manager
-    jdk22
-    julia
     kitty
-    kotlin
     lazygit
     libdrm
     libuv
     libva-utils
-    llvmPackages_19.clang-tools
-    lua51Packages.jsregexp
-    lua51Packages.lua
-    lua51Packages.luasnip
     luarocks
     mitscheme
-    mono
     neovim
+    oreo-cursors-plus
     vimPlugins.coq_nvim
     vimPlugins.mason-lspconfig-nvim
     vimPlugins.nvim-dap
     vimPlugins.neoconf-nvim
     vimPlugins.null-ls-nvim
     vimPlugins.omnisharp-extended-lsp-nvim
-    ninja
-    nodejs_22
-    ocaml
-    ocamlPackages.ocaml-lsp
-    opam
-    php
+    picom-pijulius
     polkit
     pulseaudioFull
-    python312
-    rakudo
     ripgrep
-    ruby
     rustup
-    sbcl
-    serve-d
-    swift
     thefuck
     tree-sitter
     ueberzugpp
@@ -208,11 +191,10 @@
     vscode
     wget
     xclip
-    xdg-desktop-portal
-    xdg-desktop-portal-gtk
     xdg-utils
     xfce.thunar
     xfce.thunar-volman
+    xfce.xfwm4-themes
     xss-lock
     zed-editor
     zoxide
@@ -229,9 +211,9 @@
     autostart.enable = true;
     portal = {
       enable = true;
-      extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-        pkgs.xdg-desktop-portal
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal
       ];
     };
   };
@@ -290,19 +272,21 @@
     shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
 
     shellAliases = {
-      update = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 3 --cores 1";
+      un = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
+      uh = "home-manager switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
+      update = "uh && un";
       e = "nvim";
       econf = "nvim ~/nixconfig-flake/configuration.nix";
+      ehome = "nvim ~/nixconfig-flake/home.nix";
+      eflake = "nvim ~/nixconfig-flake/flake.nix";
       se = "sudo -E nvim";
     };
+
     ohMyZsh = {
       enable = true;
       theme = "clean";
       plugins = [
-        "aliases"
-        "alias-finder"
         "bgnotify"
-        "common-aliases"
         "history-substring-search"
         "thefuck"
       ];

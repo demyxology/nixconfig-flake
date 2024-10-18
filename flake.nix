@@ -1,4 +1,13 @@
 {
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs = {
@@ -18,21 +27,21 @@
       nur,
       nixos-hardware,
       home-manager,
-    }:
+      ...
+    }@inputs:
     {
-      defaultPackage.x86_64-linux = home-manager.defaultPackage.x86_64-linux;
-
       homeConfigurations = {
         "nikita" = home-manager.lib.homeManagerConfiguration {
-          # Note: I am sure this could be done better with flake-utils or something
           pkgs = import nixpkgs { system = "x86_64-linux"; };
 
-          modules = [ ./home.nix ]; # Defined later
+          modules = [ ./home.nix ];
         };
       };
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        packages.x86_64-linux.default = home-manager.defaultPackage.x86_64-linux;
+        specialArgs = {
+          inherit inputs;
+        };
         modules = [
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
           ./hardware-configuration.nix
