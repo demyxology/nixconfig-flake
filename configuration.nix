@@ -161,6 +161,7 @@
     haskellPackages.ghci-dap
     haskellPackages.haskell-debug-adapter
     haskellPackages.hoogle
+    home-manager
     jdk22
     julia
     kitty
