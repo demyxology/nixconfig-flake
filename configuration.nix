@@ -7,32 +7,16 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      # <nixos-hardware/lenovo/thinkpad/x220>
+      <nixos-hardware/lenovo/thinkpad/x220>
       ./hardware-configuration.nix
-      # <home-manager/nixos>
-      # inputs.home-manager.nixosModules.default
-
     ];
 
-  /*
- nix = {
-  package = pkgs.nixFlakes;
-  extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
-};
-*/ 
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;	# Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -65,33 +49,15 @@
     packages = with pkgs; [];
   };
 
-  home-manager = {
-		users.nikita = { pkgs, ... }: {
-			home.packages = [ ];
-			programs.zsh.enable = true;
-
-			# The state version is required and should stay at the version you
-			# originally installed.
-			home.stateVersion = "24.05";
-		};
-
-		useUserPackages = true;
-		useGlobalPkgs = true;
-	};
-
-
   environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw
 
   nix.settings.experimental-features = "nix-command flakes";
 
-  sound.enable = true;
-
-  /*
 # i3 config
   services = {
     xserver = {
-      layout = "us";
-      xkbVariant = "";
+      xkb.layout = "us";
+      xkb.variant = "";
       enable = true;
       windowManager.i3 = {
         enable = true;
@@ -107,10 +73,9 @@
           enableXfwm = false;
         };
       };
-      displayManager = {
-        lightdm.enable = true;
-        defaultSession = "xfce+i3";
-      };
+      # displayManager = {
+        # lightdm.enable = true;
+      # };
     };
     blueman.enable = true;
     pipewire = {
@@ -122,6 +87,8 @@
       pulse.enable = true;
     };
   };
+
+  services.displayManager.defaultSession = "xfce+i3";
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -136,42 +103,6 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
-  };
-*/ 
-
-  programs = {
-    hyprland = {
-      enable = true; # enable Hyprland
-      xwayland = {
-        enable = true;
-     };
-     };
-    waybar = {
-      enable = true;
-      package = pkgs.waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-      });
-    };
-     thunar = {
-       enable = true;
-       plugins = with pkgs.xfce; [
-         thunar-archive-plugin
-         thunar-volman
-       ]; 
-    };
-  };
-  services.hypridle.enable = true;
-  programs.hyprlock.enable = true;
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  services = {
-    pipewire = {
-      enable = true;
-      alsa = {
-        enable = true;
-        support32Bit = true;
-      };
-      pulse.enable = true;
-    }; 
   };
 
   systemd = {
@@ -191,73 +122,47 @@
     };
   };
 
+  boot.tmp = {
+    useTmpfs = true;
+    tmpfsSize = "90%";
+  };
+
  # List packages installed in system profile. To search, run:
   # $ nix search wget
-  nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
-    # System
-    pulseaudioFull
-    home-manager
-    libinput
-    libinput-gestures
-    xfce.thunar
-    xfce.thunar-volman
-    gvfs
     cifs-utils
-    kitty
-    polkit
-    xdg-desktop-portal-hyprland
-    xwayland
-    wl-clipboard
-    hyprland-protocols
-    hyprlang
-    hyprutils
-    hyprwayland-scanner
-    libdrm
-    sdbus-cpp
-    wayland-protocols
-    wofi
-    wofi-emoji
-    waybar
-    zsh
-
-    # Dev tools
-    llvm_18
-    clang-tools
-    clang_18
-
-
-    # CLI
-    # neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    vim
-    wget
+    dex
+    fd
+    discord
+    dmenu
     git
-    unzip
-    binutils
-
-
-    # GUI
-    chromium
-    (retroarch.override {
-    cores = with libretro; [
-      snes9x
-    ];
-    })
-
-    # Ugh
+    google-chrome
+    gvfs
+    kitty
+    libdrm
+    libuv
     libva-utils
-    swaynotificationcenter
-    wlr-randr
-    ydotool
-    wl-clipboard
-    hyprpicker
-    swayidle
-    swaylock
-    xdg-desktop-portal-hyprland
-    hyprpaper
-    xdg-utils
+    neovim
+    polkit
+    pulseaudioFull
+    ripgrep
+    thefuck
+    unzip
+    wget
+    xclip
     xdg-desktop-portal
     xdg-desktop-portal-gtk
+    xdg-utils
+    xfce.thunar
+    xfce.thunar-volman
+    xss-lock
+    zoxide
+    zsh
+    (retroarch.override {
+      cores = with libretro; [
+        snes9x
+      ];
+    })
   ];
 
   xdg = {
@@ -265,44 +170,11 @@
   portal = {
     enable = true;
     extraPortals = [
-      pkgs.xdg-desktop-portal
       pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal
     ];
   };
 };
-
- services = {
-    xserver = {
-      enable = true;
-      layout = "us";
-      xkbVariant = "";
-      excludePackages = [ pkgs.xterm ];
-      videoDrivers = [ "intel" ];
-      libinput.enable = true;
-      displayManager.gdm = {
-	enable = true;
-	wayland = true;
-      };
-    };
-    dbus.enable = true;
-    tumbler.enable = true;
-    gnome = {
-      sushi.enable = true;
-      gnome-keyring.enable = true;
-    };
-  };
-
-  security = {
-    pam.services.swaylock = {
-     text = ''
-       auth include login
-       '';
-    };
-    polkit.enable = true;
-    rtkit.enable = true;
-  };
-
-  # programs.steam.enable = true;
 
   services.gvfs = {
     enable = true;
@@ -313,13 +185,7 @@
   programs.nix-ld.libraries = with pkgs; [
     # Add any missing dynamic libraries for unpackaged programs
     # here, NOT in environment.systemPackages
-    stdenv.cc.cc
   ];
-
-  # Window manager
-  # Security was enabled for SWAY
-	# security.polkit.enable = true;
-  #programs.light.enable = true;
 
   # Fonts
     fonts = {
@@ -328,9 +194,7 @@
       noto-fonts-cjk
       noto-fonts-emoji
       font-awesome
-      source-han-sans
-      source-han-sans-japanese
-      source-han-serif-japanese
+      dejavu_fonts
     ];
     fontconfig.defaultFonts = {
       serif = [ "Noto Serif" "Source Han Serif" ];
@@ -338,33 +202,53 @@
     };
   };
 
+	programs.neovim = {
+		enable = true;
+		defaultEditor = true;
+		configure = {
+			customRC = ''
+			set tabstop=2
+			set shiftwidth=2
+			set smartcase
+			'';
+		};
+	};
+
   programs.zsh = {
     enable = true;
-    enableCompletion = true;
-    #autosuggestion.enable = true;
+    enableCompletion = true;	
+    enableBashCompletion = true;
+    autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
-    #initExtra = "eval \"$(zoxide init zsh --cmd cd)\"";
+    enableLsColors = true;
+    shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
 
     shellAliases = {
-      update = "sudo nixos-rebuild switch";
+      update = "sudo nixos-rebuild switch --max-jobs 2 --cores 4";
       e = "nvim";
       econf = "sudo -E nvim /etc/nixos/configuration.nix";
-      ehome = "e ~/.config/home-manager/home.nix";
       ezsh  = "e ~/.zshrc" ;
       resource  = "source ~/.zshrc";
       se    = "sudo -E nvim";
-      hms   = "home-manager switch";
     };
-    oh-my-zsh = {
+    ohMyZsh = {
       enable = true;
       theme = "clean";
+      plugins = [
+				"aliases"
+				"alias-finder"
+				"bgnotify"
+				"common-aliases"
+				"history-substring-search"
+				"thefuck"
+      ];
     };
   };
 
 
   # Hardware (opengl, bluetooth, etc...)
   hardware = {
-    opengl.enable = true;
+    graphics.enable = true;
     bluetooth.enable = true;
   };
 
