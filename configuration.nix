@@ -103,11 +103,6 @@
     };
   };
 
-  programs.i3status = {
-    enable = true;
-    settings = ./i3status.conf;
-  };
-
   services.picom = {
     enable = true;
     backend = "egl";
