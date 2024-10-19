@@ -106,8 +106,32 @@
     enable = true;
     backend = "egl";
     vSync = true;
+    activeOpacity = 0.9;
+    inactiveOpacity = 0.8;
+    shadow = true;
+    shadowOpacity = 0.5;
+    fade = true;
+    fadeDelta = 5;
+    opacityRules = [
+      "90:class_g = 'kitty'"
+    ];
     settings = {
       corner-radius = 10;
+      inactive-opacity-override = true;
+      blur-background = true;
+      blur-background-frame = true;
+      blur-background-fixed = true;
+      blur-background-exclude = [
+        "window_type = 'dock'"
+        "window_type = 'desktop'"
+      ];
+      blur-kern = "3x3box";
+      blur-method = "kawase";
+      blur-strength = 10;
+      shadow-radius = 60;
+      shadow-offset-x = -60;
+      shadow-offset-y = -25;
+      shadow-ignore-shaped = false;
     };
   };
 
