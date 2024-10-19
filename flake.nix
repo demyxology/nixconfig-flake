@@ -52,7 +52,6 @@
             home-manager.useUserPackages = true;
             home-manager.users.nikita = import ./home.nix;
           }
-          ./i3
         ];
       };
     };
