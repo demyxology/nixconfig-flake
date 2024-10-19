@@ -77,6 +77,7 @@
       enable = true;
       windowManager.i3 = {
         enable = true;
+        configFile = ./i3.cfg; 
         extraPackages = with pkgs; [
           i3status
         ];
@@ -106,15 +107,10 @@
     enable = true;
     backend = "egl";
     vSync = true;
-    activeOpacity = 0.9;
-    inactiveOpacity = 0.8;
     shadow = true;
     shadowOpacity = 0.5;
     fade = true;
     fadeDelta = 5;
-    opacityRules = [
-      "90:class_g = 'kitty'"
-    ];
     settings = {
       corner-radius = 10;
       inactive-opacity-override = true;
@@ -126,7 +122,7 @@
         "window_type = 'desktop'"
       ];
       blur-kern = "3x3box";
-      blur-method = "kawase";
+      blur-method = "gaussian";
       blur-strength = 10;
       shadow-radius = 60;
       shadow-offset-x = -60;
@@ -183,7 +179,6 @@
     file
     fzf
     git
-    go
     google-chrome
     gvfs
     home-manager
@@ -192,8 +187,6 @@
     libdrm
     libuv
     libva-utils
-    luarocks
-    mitscheme
     neovim
     oreo-cursors-plus
     vimPlugins.coq_nvim
@@ -206,7 +199,6 @@
     polkit
     pulseaudioFull
     ripgrep
-    rustup
     thefuck
     tree-sitter
     ueberzugpp
@@ -219,8 +211,6 @@
     xfce.thunar
     xfce.thunar-volman
     xfce.xfwm4-themes
-    xss-lock
-    zed-editor
     zoxide
     zsh
     nixfmt-rfc-style
