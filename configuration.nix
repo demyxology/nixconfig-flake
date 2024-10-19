@@ -77,7 +77,7 @@
       enable = true;
       windowManager.i3 = {
         enable = true;
-        configFile = ./i3.cfg; 
+        configFile = ./i3.conf;
         extraPackages = with pkgs; [
           i3status
         ];
