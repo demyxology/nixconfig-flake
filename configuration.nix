@@ -77,10 +77,10 @@
       enable = true;
       windowManager.i3 = {
         enable = true;
-        configFile = ./i3.conf;
         extraPackages = with pkgs; [
           i3status
         ];
+        configFile = ./i3.conf;
       };
       desktopManager = {
         xterm.enable = false;
