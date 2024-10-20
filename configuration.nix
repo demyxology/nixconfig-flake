@@ -98,7 +98,9 @@
           enableXfwm = false;
         };
       };
-      displayManager.lightdm.greeters.lomiri.enable = true;
+      # displayManager.lightdm.greeters.lomiri.enable = true;
+      # displayManager.gdm.enable = true;
+      displayManager.lightdm.greeters.slick.enable = true;
     };
     blueman.enable = true;
     pipewire = {
@@ -118,29 +120,24 @@
     fade = true;
     fadeDelta = 2;
     settings = {
+      blur-method = "gaussian";
+      blur-size = 15;
+      blur-strength = 15;
+      blur-background-frame = true;
+      blur-kern = "3x3box";
+      dbus = true;
+      use-ewmh-active-win = true;
+      detect-transient = true;
+      use-damage = true;
+
       corner-radius = 10;
       opacity-rule = [
         "100:class_g = 'i3status'"
+        "100:class_g = 'kitty'"
       ];
         focus-exclude = "x = 0 && y = 0 && override_redirect = true";
-        blur-background = true;
-        blur-background-frame = true;
-        blur-background-fixed = true;
-        blur-kern = "3x3box";
-        blur-method = "gaussian";
-        blur-strength = 20;
     };
   };
-
-  /*
-  nixpkgs.overlays = [
-    (final: prev: {
-      picom = prev.picom.override {
-        serviceConfig.ExecStart = prev.picom.serviceConfig.ExecStart ++ [ " --dbus --use-ewmh-active-win" ];
-      };
-    })
-  ];
-  */
 
   services.displayManager.defaultSession = "xfce+i3";
 
@@ -195,6 +192,7 @@
     kitty
     lazygit
     libdrm
+    libinput-gestures
     libuv
     libva-utils
     neovim
@@ -243,6 +241,8 @@
     };
   };
 
+  services.flatpak.enable = true;
+
   services.gvfs = {
     enable = true;
     package = pkgs.gnome3.gvfs;
@@ -262,6 +262,8 @@
       noto-fonts-emoji
       font-awesome
       dejavu_fonts
+      ubuntu_font_family
+      terminus-nerdfont
     ];
     fontconfig.defaultFonts = {
       serif = [
@@ -297,13 +299,15 @@
     shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
 
     shellAliases = {
-      un = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
+      switch = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
       uh = "home-manager switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
-      update = "uh && un";
       e = "nvim";
       econf = "nvim ~/nixconfig-flake/configuration.nix";
       ehome = "nvim ~/nixconfig-flake/home.nix";
       eflake = "nvim ~/nixconfig-flake/flake.nix";
+      ekitty = "e ~/.config/kitty/kitty.conf";
+      ei3 = "e ~/nixconfig-flake/i3.conf";
+      epicom = "econf";
       se = "sudo -E nvim";
     };
 
