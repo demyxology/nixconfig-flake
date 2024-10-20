@@ -10,45 +10,10 @@
 }:
 
 {
-
-
-  environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw
-  environment.variables = {
-    TERMINAL = "kitty";
-  };
-
-  nix.settings.experimental-features = "nix-command flakes";
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
-  # i3 config
   services = {
     xserver = {
       xkb.layout = "us";
       xkb.variant = "";
-      enable = true;
-      windowManager.i3 = {
-        enable = true;
-        extraPackages = with pkgs; [
-          i3status
-        ];
-        configFile = ./i3.conf;
-      };
-      desktopManager = {
-        xterm.enable = false;
-        xfce = {
-          enable = true;
-          noDesktop = true;
-          enableXfwm = false;
-        };
-      };
-      # displayManager.lightdm.greeters.lomiri.enable = true;
-      # displayManager.gdm.enable = true;
-      displayManager.lightdm.greeters.slick.enable = true;
     };
     blueman.enable = true;
     pipewire = {
@@ -61,33 +26,6 @@
     };
   };
 
-  services.picom = {
-    enable = true;
-    backend = "egl";
-    vSync = true;
-    fade = true;
-    fadeDelta = 2;
-    settings = {
-      blur-method = "gaussian";
-      blur-size = 15;
-      blur-strength = 15;
-      blur-background-frame = true;
-      blur-kern = "3x3box";
-      dbus = true;
-      use-ewmh-active-win = true;
-      detect-transient = true;
-      use-damage = true;
-
-      corner-radius = 10;
-      opacity-rule = [
-        "100:class_g = 'i3status'"
-        "100:class_g = 'kitty'"
-      ];
-        focus-exclude = "x = 0 && y = 0 && override_redirect = true";
-    };
-  };
-
-  services.displayManager.defaultSession = "xfce+i3";
 
   nixpkgs.config = {
     allowUnfree = true;

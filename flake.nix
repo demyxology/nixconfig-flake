@@ -26,6 +26,10 @@
       nixos-hardware,
       ...
     }@inputs:
+    let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      display = import ./display.nix { inherit pkgs; };
+    in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = {
@@ -39,6 +43,7 @@
           ./syscfg.nix
           ./nixoscfg.nix
           ./env.nix
+          display
 
         ];
       };
