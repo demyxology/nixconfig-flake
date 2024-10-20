@@ -11,6 +11,11 @@
 
 {
 
+  # Not sure why this HAS to go here
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
+
   xdg = {
     autostart.enable = true;
     portal = {
