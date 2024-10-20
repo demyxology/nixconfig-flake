@@ -10,66 +10,6 @@
 }:
 
 {
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    binutils
-    cachix
-    chafa
-    cifs-utils
-    dconf
-    dex
-    discord
-    emacs
-    fd
-    file
-    fzf
-    git
-    google-chrome
-    gvfs
-    kitty
-    lazygit
-    libdrm
-    libinput-gestures
-    libuv
-    libva-utils
-    neovim
-    oreo-cursors-plus
-    vimPlugins.coq_nvim
-    vimPlugins.mason-lspconfig-nvim
-    vimPlugins.nvim-dap
-    vimPlugins.neoconf-nvim
-    vimPlugins.null-ls-nvim
-    vimPlugins.omnisharp-extended-lsp-nvim
-    picom
-    polkit
-    pulseaudioFull
-    ripgrep
-    thefuck
-    tree-sitter
-    ueberzugpp
-    unzip
-    viu
-    vscode
-    wget
-    xclip
-    xdg-utils
-    xfce.thunar
-    xfce.thunar-volman
-    xfce.xfwm4-themes
-    zoxide
-    zsh
-    nixfmt-rfc-style
-    (retroarch.override {
-      cores = with libretro; [
-        snes9x
-      ];
-    })
-  ];
 
   xdg = {
     autostart.enable = true;
@@ -82,12 +22,7 @@
     };
   };
 
-  services.flatpak.enable = true;
 
-  services.gvfs = {
-    enable = true;
-    package = pkgs.gnome3.gvfs;
-  };
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
@@ -96,27 +31,6 @@
   ];
 
   # Fonts
-  fonts = {
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      font-awesome
-      dejavu_fonts
-      ubuntu_font_family
-      terminus-nerdfont
-    ];
-    fontconfig.defaultFonts = {
-      serif = [
-        "Noto Serif"
-        "Source Han Serif"
-      ];
-      sansSerif = [
-        "Noto Sans"
-        "Source Han Sans"
-      ];
-    };
-  };
 
   programs.neovim = {
     enable = true;
@@ -130,52 +44,10 @@
     };
   };
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    enableBashCompletion = true;
-    autosuggestions.enable = true;
-    syntaxHighlighting.enable = true;
-    enableLsColors = true;
-    shellInit = "eval \"$(zoxide init zsh --cmd cd)\"";
-
-    shellAliases = {
-      switch = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
-      e = "nvim";
-      econf = "nvim ~/nixconfig-flake/configuration.nix";
-      eflake = "nvim ~/nixconfig-flake/flake.nix";
-      ekitty = "e ~/.config/kitty/kitty.conf";
-      ei3 = "e ~/nixconfig-flake/i3.conf";
-      epicom = "econf";
-      se = "sudo -E nvim";
-    };
-
-    ohMyZsh = {
-      enable = true;
-      theme = "clean";
-      plugins = [
-        "bgnotify"
-        "history-substring-search"
-        "thefuck"
-      ];
-    };
-  };
 
   # Hardware (opengl, bluetooth, etc...)
-  hardware = {
-    graphics.enable = true;
-    bluetooth.enable = true;
-  };
 
-  # Default shell
-  users.defaultUserShell = pkgs.zsh;
-  environment.shells = with pkgs; [ zsh ];
 
-  services.libinput = {
-    enable = true;
-    touchpad.naturalScrolling = true;
-    touchpad.accelStepScroll = 0.1;
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -188,38 +60,17 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-  networking.firewall = {
-    enable = true;
-    extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
-  };
+  # networking.firewall = {
+  #  enable = true;
+  #  extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
+  # };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  fileSystems."/home/nikita/netshare/balthasar/c" = {
-    device = "//balthasar/c";
-    fsType = "cifs";
-    options =
-      let
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in
-      [ "${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100" ];
-  };
-
-  fileSystems."/home/nikita/netshare/balthasar/d" = {
-    device = "//balthasar/d";
-    fsType = "cifs";
-    options =
-      let
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in
-      [ "${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100" ];
-
-  };
   #
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
