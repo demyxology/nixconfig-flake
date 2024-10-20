@@ -11,8 +11,16 @@
 
 {
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    tmp = {
+      useTmpfs = true;
+      tmpfsSize = "90%";
+      cleanOnBoot = true;
+    };
+  };
+
 
   networking.hostName = "nixos"; # Define your hostname.
 
@@ -107,29 +115,32 @@
     enable = true;
     backend = "egl";
     vSync = true;
-    shadow = true;
-    shadowOpacity = 0.5;
     fade = true;
-    fadeDelta = 5;
+    fadeDelta = 2;
     settings = {
       corner-radius = 10;
-      inactive-opacity-override = true;
-      blur-background = true;
-      blur-background-frame = true;
-      blur-background-fixed = true;
-      blur-background-exclude = [
-        "window_type = 'dock'"
-        "window_type = 'desktop'"
+      opacity-rule = [
+        "100:class_g = 'i3status'"
       ];
-      blur-kern = "3x3box";
-      blur-method = "gaussian";
-      blur-strength = 10;
-      shadow-radius = 60;
-      shadow-offset-x = -60;
-      shadow-offset-y = -25;
-      shadow-ignore-shaped = false;
+        focus-exclude = "x = 0 && y = 0 && override_redirect = true";
+        blur-background = true;
+        blur-background-frame = true;
+        blur-background-fixed = true;
+        blur-kern = "3x3box";
+        blur-method = "gaussian";
+        blur-strength = 20;
     };
   };
+
+  /*
+  nixpkgs.overlays = [
+    (final: prev: {
+      picom = prev.picom.override {
+        serviceConfig.ExecStart = prev.picom.serviceConfig.ExecStart ++ [ " --dbus --use-ewmh-active-win" ];
+      };
+    })
+  ];
+  */
 
   services.displayManager.defaultSession = "xfce+i3";
 
@@ -173,7 +184,6 @@
     cifs-utils
     dex
     discord
-    dmenu
     emacs
     fd
     file
@@ -195,10 +205,11 @@
     vimPlugins.neoconf-nvim
     vimPlugins.null-ls-nvim
     vimPlugins.omnisharp-extended-lsp-nvim
-    picom-pijulius
+    picom
     polkit
     pulseaudioFull
     ripgrep
+    rofi
     thefuck
     tree-sitter
     ueberzugpp
@@ -320,6 +331,7 @@
   services.libinput = {
     enable = true;
     touchpad.naturalScrolling = true;
+    touchpad.accelStepScroll = 0.1;
   };
 
   # Some programs need SUID wrappers, can be configured further or are
