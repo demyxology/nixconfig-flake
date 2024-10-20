@@ -45,8 +45,11 @@
         modules = [
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
           ./hardware-configuration.nix
+
           ./configuration.nix
           ./syscfg.nix
+          ./nixoscfg.nix { inherit pkgs; }
+
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
