@@ -50,7 +50,6 @@
     pulseaudioFull
     ripgrep
     thefuck
-    thunar
     tree-sitter
     ueberzugpp
     unzip

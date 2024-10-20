@@ -29,7 +29,11 @@
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       display = import ./display.nix { inherit pkgs; };
+      fonts = import ./fonts.nix { inherit pkgs; };
       systemd = import ./systemd.nix { inherit pkgs; };
+      zsh = import ./zsh.nix { inherit pkgs; };
+      programs = import ./programs { inherit pkgs; };
+      services = import ./services { inherit pkgs; };
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -41,12 +45,17 @@
           ./hardware-configuration.nix
 
           ./configuration.nix
-          ./syscfg.nix
-          ./nixoscfg.nix
           ./env.nix
-          display
           ./hw.nix
-
+          ./mount.nix
+          ./nixoscfg.nix
+          ./syscfg.nix
+          display
+          fonts
+          programs
+          services
+          systemd
+          zsh
         ];
       };
     };
