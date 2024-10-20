@@ -29,6 +29,7 @@
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       display = import ./display.nix { inherit pkgs; };
+      systemd = import ./systemd.nix { inherit pkgs; };
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {

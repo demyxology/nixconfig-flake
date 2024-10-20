@@ -10,52 +10,8 @@
 }:
 
 {
-  services = {
-    xserver = {
-      xkb.layout = "us";
-      xkb.variant = "";
-    };
-    blueman.enable = true;
-    pipewire = {
-      enable = true;
-      alsa = {
-        enable = true;
-        support32Bit = true;
-      };
-      pulse.enable = true;
-    };
-  };
-
-
   nixpkgs.config = {
     allowUnfree = true;
-    pulseaudio = true;
-  };
-
-  programs = {
-    thunar.enable = true;
-    dconf.enable = true;
-  };
-
-  security = {
-    polkit.enable = true;
-    rtkit.enable = true;
-  };
-
-  systemd = {
-    user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
   };
 
   # List packages installed in system profile. To search, run:
@@ -65,6 +21,7 @@
     cachix
     chafa
     cifs-utils
+    dconf
     dex
     discord
     emacs
@@ -92,8 +49,8 @@
     polkit
     pulseaudioFull
     ripgrep
-    rofi
     thefuck
+    thunar
     tree-sitter
     ueberzugpp
     unzip

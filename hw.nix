@@ -13,7 +13,6 @@
       };
       pulse = {
         enable = true;
-        support32Bit = true;
       };
     };
   };
