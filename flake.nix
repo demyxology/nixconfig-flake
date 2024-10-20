@@ -16,8 +16,6 @@
     nur = {
       url = "github:nix-community/NUR";
     };
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -26,21 +24,9 @@
       nixpkgs,
       nur,
       nixos-hardware,
-      home-manager,
       ...
     }@inputs:
-    let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    in
     {
-      homeConfigurations = {
-        "nikita" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
-
-          modules = [ ./home.nix ];
-        };
-      };
-
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
@@ -52,14 +38,8 @@
           ./configuration.nix
           ./syscfg.nix
           ./nixoscfg.nix
-          { inherit pkgs; }
+          ./env.nix
 
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.nikita = import ./home.nix;
-          }
         ];
       };
     };
