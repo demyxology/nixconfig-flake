@@ -38,15 +38,10 @@
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs;
-        };
-
         modules = [
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
           ./hardware-configuration.nix
 
-          ./configuration.nix
           ./env.nix
           ./hw.nix
           ./mount.nix
