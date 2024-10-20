@@ -1,10 +1,5 @@
-{ pkgs }:
+{ pkgs, lib }:
 {
-
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -14,13 +9,11 @@
     cifs-utils
     dconf
     dex
-    discord
     emacs
     fd
     file
     fzf
     git
-    google-chrome
     gvfs
     kitty
     lazygit
@@ -44,7 +37,6 @@
     tree-sitter
     unzip
     viu
-    vscode
     wget
     xclip
     xdg-utils
@@ -54,10 +46,27 @@
     zoxide
     zsh
     nixfmt-rfc-style
-    (retroarch.override {
-      cores = with libretro; [
-        snes9x
-      ];
-    })
+    retroarch
   ];
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Add any missing dynamic libraries for unpackaged programs
+    # here, NOT in environment.systemPackages
+  ];
+
+  # Misc tbh
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "discord"
+      "google-chrome"
+      "vscode"
+      "libretro-snes9x"
+    ];
 }

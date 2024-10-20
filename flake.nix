@@ -28,11 +28,12 @@
     }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      lib = nixpkgs.lib;
       display = import ./display.nix { inherit pkgs; };
       fonts = import ./fonts.nix { inherit pkgs; };
       systemd = import ./systemd.nix { inherit pkgs; };
       zsh = import ./zsh.nix { inherit pkgs; };
-      programs = import ./programs { inherit pkgs; };
+      programs = import ./programs { inherit pkgs lib; };
       services = import ./services { inherit pkgs; };
     in
     {
@@ -40,6 +41,7 @@
         specialArgs = {
           inherit inputs;
         };
+
         modules = [
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
           ./hardware-configuration.nix
