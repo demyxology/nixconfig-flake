@@ -11,24 +11,6 @@
 
 {
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.nikita = {
-    isNormalUser = true;
-    description = "nikita";
-
-    # video added for brightness control
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "video"
-    ];
-    packages = with pkgs; [ ];
-  };
-
-  nix.settings.trusted-users = [
-    "root"
-    "nikita"
-  ];
 
   environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw
   environment.variables = {
@@ -154,7 +136,6 @@
     git
     google-chrome
     gvfs
-    home-manager
     kitty
     lazygit
     libdrm
@@ -266,10 +247,8 @@
 
     shellAliases = {
       switch = "sudo nixos-rebuild switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
-      uh = "home-manager switch --flake ~/nixconfig-flake/ --max-jobs 2 --cores 1";
       e = "nvim";
       econf = "nvim ~/nixconfig-flake/configuration.nix";
-      ehome = "nvim ~/nixconfig-flake/home.nix";
       eflake = "nvim ~/nixconfig-flake/flake.nix";
       ekitty = "e ~/.config/kitty/kitty.conf";
       ei3 = "e ~/nixconfig-flake/i3.conf";

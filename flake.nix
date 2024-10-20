@@ -29,6 +29,9 @@
       home-manager,
       ...
     }@inputs:
+    let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    in
     {
       homeConfigurations = {
         "nikita" = home-manager.lib.homeManagerConfiguration {
@@ -48,7 +51,8 @@
 
           ./configuration.nix
           ./syscfg.nix
-          ./nixoscfg.nix { inherit pkgs; }
+          ./nixoscfg.nix
+          { inherit pkgs; }
 
           home-manager.nixosModules.home-manager
           {
