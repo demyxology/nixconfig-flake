@@ -19,7 +19,10 @@
           enableXfwm = false;
         };
       };
-      displayManager.lightdm.greeters.slick.enable = true;
+      displayManager.lightdm.greeters.slick = {
+        enable = true;
+        draw-user-backgrounds = true;
+      };
     };
   };
 

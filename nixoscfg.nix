@@ -1,6 +1,7 @@
 # OS-specific config like username, groups, etc.
 
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.nikita = {
     isNormalUser = true;
@@ -28,4 +29,5 @@
     options = "--delete-older-than 30d";
   };
 
+  system.stateVersion = "24.05";
 }
