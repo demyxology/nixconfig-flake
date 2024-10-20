@@ -46,6 +46,7 @@
           nixos-hardware.nixosModules.lenovo-thinkpad-x220
           ./hardware-configuration.nix
           ./configuration.nix
+          ./syscfg.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
