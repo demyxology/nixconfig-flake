@@ -44,6 +44,7 @@
           ./nixoscfg.nix
           ./env.nix
           display
+          ./hw.nix
 
         ];
       };
